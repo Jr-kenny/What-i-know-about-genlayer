@@ -4,12 +4,25 @@
 
 2. **[All i know about genlayer ](https://github.com/Jr-kenny/What-i-know-about-genlayer)**  
    
-3. Demo Repositories  
-   (Strict / Comparative / Non-Comparative, Read / Write / Deploy)
+3. Demo Repositories
+
+### The Equivalence Principle
+Strict Equivalence Principle
+
+Comparative Equivalence Principle
+
+Non-Comparative Equivalence Principle
+
+### Call methods
+Read
+
+Write
+
+Deploy
    
-4. [Genlayer docs
+5. [Genlayer docs
 ](https://docs.genlayer.com/)
-5. [Genlayer boilerplate](https://github.com/genlayerlabs/genlayer-project-boilerplate)
+6. [Genlayer boilerplate](https://github.com/genlayerlabs/genlayer-project-boilerplate)
    
 
 GenLayer is essentially a blockchain that has been upgraded to understand the messy, unpredictable world of AI and the internet. In a normal blockchain, everything must be 100% identical and predictable. GenLayer, however, allows for a little bit of wiggle room so it can process AI generated text or real time web data.
