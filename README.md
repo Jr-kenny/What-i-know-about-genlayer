@@ -1,3 +1,14 @@
+## 📚 Recommended Learning Path
+
+1. **Creating an Intelligent Contract on GenLayer**  
+   ([inteligencontracts](https://github.com/Jr-kenny/INTELLIGENT-CONTRACT-WITH-GENLAYER-STUDIO-))
+
+2. **GenLayer by Example (this repo)**  
+   (Equivalence principles, call methods, real-world demos)
+
+3. Demo Repositories  
+   (Strict / Comparative / Non-Comparative, Read / Write / Deploy)
+
 GenLayer is essentially a blockchain that has been upgraded to understand the messy, unpredictable world of AI and the internet. In a normal blockchain, everything must be 100% identical and predictable. GenLayer, however, allows for a little bit of wiggle room so it can process AI generated text or real time web data.
 
 Here is the breakdown of how it works, simplified.
