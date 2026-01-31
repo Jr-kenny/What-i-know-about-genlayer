@@ -2,9 +2,8 @@
 
 1. **[Creating an Intelligent Contract on GenLayer](https://github.com/Jr-kenny/INTELLIGENT-CONTRACT-WITH-GENLAYER-STUDIO-)**  
 
-2. **GenLayer by Example (this repo)**  
-   (Equivalence principles, call methods, real-world demos)
-
+2. **[All i know about genlayer ](https://github.com/Jr-kenny/What-i-know-about-genlayer)**  
+   
 3. Demo Repositories  
    (Strict / Comparative / Non-Comparative, Read / Write / Deploy)
 
