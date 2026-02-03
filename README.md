@@ -60,10 +60,13 @@ One computer acts as the **Leader** (the one who does the initial work), and the
 
 ### Why this matters
 
-knowing what principle you app falls on make it easier in know what intelligent contract rules you are to use, so you don't get confuse using an intelligent contract with strict equivalence to worrk on an app that should use one for comparative 
+knowing what principle you app falls on make it easier in know what intelligent contract rules you are to use, so you don't get confuse using an intelligent contract with strict equivalence to worrk on an app that should use one for comparative. 
 * **Strict** is for when there is only one right answer.
 * **Comparative** is for when the answer is a number that might be slightly different depending on the second you check it (e.g., 99% vs 100%).
 * **Non-Comparative** is the "speedy" option for AI. Instead of everyone writing their own summary of a book, the Leader writes it, and the others just give it a "thumbs up" if it meets the criteria.
+* 
+[use this to propmt an LLM to build you an intelligent contract 
+](https://github.com/Jr-kenny/INTELLIGENT-CONTRACT-WITH-GENLAYER-STUDIO-)
 
 > **The Big Picture:** GenLayer uses these rules to make sure that even if AI is "guessing" or "interpreting," the entire network stays in sync and can't be cheated.
 
