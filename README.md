@@ -4,22 +4,15 @@
 
 2. **[All i know about genlayer ](https://github.com/Jr-kenny/What-i-know-about-genlayer)**  
    
-3. Demo Repositories
+3. example works
+   
+   https://github.com/Jr-kenny/Genlayer-Events
 
-### The Equivalence Principle
-Strict Equivalence Principle
+   https://github.com/Jr-kenny/Prime-valuator
 
-Comparative Equivalence Principle
+   https://github.com/Jr-kenny/Prime-mall-customer-service
 
-[Non-Comparative Equivalence Principle
-](https://github.com/Jr-kenny/Wordwise)
-
-### Call methods
-Read
-
-Write
-
-Deploy
+   https://github.com/Jr-kenny/Wordwise
    
 5. [Genlayer docs
 ](https://docs.genlayer.com/)
