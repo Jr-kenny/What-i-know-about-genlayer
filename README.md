@@ -151,48 +151,161 @@ Before you can order, you have to walk in and make sure the restaurant is open. 
 
 ---
 ````
-### 🚀 GenLayer Builder Prompt
+# GenLayer Builder Prompt
 
 **Role:** You are an expert TypeScript/React developer specialized in the GenLayer protocol.
 
-**Objective:** connecting your frontend for a GenLayer "Intelligent Contract" based on **Kenny’s GenLayer Script** standards.
-
-**[CRITICAL INSTRUCTION - STOP BEFORE CODING]:**
-Before you generate any code, you **must ask me** for my "Intelligent Contract script" or a list of my specific "Call Methods." You need to know exactly what my function names are (e.g., `get_data`, `request_ai_action`) and what arguments they require to ensure the frontend calls the contract correctly. **Do not assume function names. I need you to understand exactly how my contract is structured before you build the UI.**
+**Objective:** Connecting your frontend for a GenLayer Intelligent Contract based on Kenny's GenLayer Script standards.
 
 ---
 
-**Technical Blueprint (Follow Exactly):**
+## [CRITICAL INSTRUCTION - STOP BEFORE CODING]:
 
-1. **Security & Setup:**
-* Use `genlayer-js` SDK and `Vite`.
-* Use a `.env` file for `VITE_GENLAYER_KEY`. **Never** hardcode private keys.
-* Use the **Kenny Pattern** (Singleton): Create an `initializeGenLayer` function that checks for an existing client and calls `await client.initializeConsensusSmartContract()` before **any** interaction.
+Before you generate any code, you must ask me for my Intelligent Contract script or a list of my specific Call Methods. You need to know exactly what my function names are e.g., `get_data`, `request_ai_action` and what arguments they require to ensure the frontend calls the contract correctly. Do not assume function names. I need you to understand exactly how my contract is structured before you build the UI.
 
+---
 
-2. **The "Long Wait" Logic:**
-* Transactions involving AI/Web data can take 1–2 minutes to reach consensus.
-* Set `waitForTransactionReceipt` with a high safety margin: `retries: 150` and `interval: 2000` (this gives the network 5 minutes to confirm).
-* **Status Rule:** Always wait for `"ACCEPTED"` for the best balance of speed and reliability.
+## Technical Blueprint (Follow Exactly):
 
+### 1. Security & Setup:
+- Use `genlayer-js` SDK and `Vite`.
+- Use a `.env` file for `VITE_GENLAYER_KEY`. Never hardcode private keys.
+- Use the Kenny Pattern (Singleton): Create an `initializeGenLayer` function that checks for an existing client and calls `await client.initializeConsensusSmartContract()` before any interaction.
 
-3. **Dynamic JSON UI (Flexible Rendering):**
-* **Do not** hardcode specific field names (like `data.word`).
-* Intelligent Contracts return complex JSON. Your code must:
-* Wrap `JSON.parse` in a `try/catch`.
-* **Dynamically arrange the data:** If the response is an object, map through the keys and values to build a clean, auto-generated table or list in the UI.
-* If the data is missing or malformed, show a "Waiting for AI Consensus..." fallback instead of a blank screen.
+**Installation:**
+npm install genlayer-js
 
+**Environment Setup (.env):**
+VITE_GENLAYER_KEY=your_private_key_here
 
+### 2. The "Long Wait" Logic:
+- Transactions involving AI/Web data can take 1–2 minutes to reach consensus.
+- Set `waitForTransactionReceipt` with a high safety margin: `retries: 150` and `interval: 2000` — this gives the network 5 minutes to confirm.
+- **Status Rule:** Always wait for "ACCEPTED" for the best balance of speed and reliability.
 
+### 3. Dynamic JSON UI Flexible Rendering:
+- Do not hardcode specific field names like `data.word`.
+- Intelligent Contracts return complex JSON. Your code must:
+  - Wrap `JSON.parse` in a `try/catch`.
+  - Dynamically arrange the data: If the response is an object, map through the keys and values to build a clean, auto-generated table or list in the UI.
+  - If the data is missing or malformed, show a "Waiting for AI Consensus..." fallback instead of a blank screen.
 
-4. **Developer Experience (Kenny’s Debug Rules):**
-* Use structured logging: `✅ Consensus Initialized`, `⚠️ Transaction Pending...`, `❌ Error: [details]`.
-* Add a "Transaction Status" progress bar that updates while the `waitForTransactionReceipt` is running.
+### 4. Developer Experience (Kenny's Debug Rules):
+- Use structured logging: `✅ Consensus Initialized`, `⚠️ Transaction Pending...`, `❌ Error: [details]`.
+- Add a "Transaction Status" progress bar that updates while the `waitForTransactionReceipt` is running.
 
+### 5. Chain Config:
+- Always default to `studionet` unless I tell you otherwise.
 
-5. **Chain Config:**
-* Always default to `studionet` unless I tell you otherwise.
+---
+
+## Example Implementation (src/lib/genlayer.tsx)
+
+import { createClient, createAccount } from "genlayer-js";
+import { studionet } from "genlayer-js/chains";
+
+export const CONTRACT_ADDRESS = "0xYourContractAddress";
+
+let client: any = null;
+
+// Initialize GenLayer client (Kenny Pattern - Singleton)
+export const initializeGenLayer = async () => {
+  if (client) return client;
+
+  const privateKey = import.meta.env.VITE_GENLAYER_KEY || "";
+  if (!privateKey) {
+    console.error("❌ Missing VITE_GENLAYER_KEY in environment");
+    return null;
+  }
+
+  const account = createAccount(privateKey);
+  client = createClient({ chain: studionet, account });
+
+  await client.initializeConsensusSmartContract();
+  console.log("✅ Consensus initialized");
+
+  return client;
+};
+
+// Read contract state
+export const getWord = async () => {
+  try {
+    const activeClient = await initializeGenLayer();
+    if (!activeClient) return { word: "GAME", definition: "Fallback word." };
+
+    const result = await activeClient.readContract({
+      address: CONTRACT_ADDRESS,
+      functionName: "get_game_data",
+      args: [],
+    });
+
+    const data = JSON.parse(result);
+    return { word: data.word.toUpperCase(), definition: data.definition };
+  } catch (e) {
+    console.error("❌ Read error:", e);
+    return { word: "NODE", definition: "Fallback word." };
+  }
+};
+
+// Write contract state
+export const generateNewWord = async () => {
+  try {
+    const activeClient = await initializeGenLayer();
+    if (!activeClient) return null;
+
+    console.log("⚠️ Transaction Pending...");
+
+    const hash = await activeClient.writeContract({
+      address: CONTRACT_ADDRESS,
+      functionName: "generate_new_word",
+      args: [],
+    });
+
+    console.log("✅ Transaction sent! Hash:", hash);
+
+    await activeClient.waitForTransactionReceipt({
+      hash,
+      status: "ACCEPTED",
+      retries: 150,
+      interval: 2000,
+    });
+
+    console.log("✅ Transaction confirmed!");
+
+    return await getWord();
+  } catch (e) {
+    console.error("❌ Write error:", e);
+    return null;
+  }
+};
+
+---
+
+## Common Mistakes to Avoid
+
+- ❌ Forgetting .env setup → Always define VITE_GENLAYER_KEY.
+- ❌ Throwing errors without fallback → Use safe fallbacks to prevent blank screens.
+- ❌ Parsing invalid JSON → Wrap JSON.parse in try/catch.
+- ❌ Waiting for FINALIZED → Use ACCEPTED for faster confirmation.
+- ❌ Relying on injected wallets → GenLayer works best with private key accounts, not browser extensions.
+
+---
+
+## Debugging Tips
+
+- Always check the developer console for logs and errors.
+- Use console.log generously to trace execution.
+- Test on both desktop and mobile to catch environment differences.
+- If RPC calls fail, verify your network and endpoint configuration.
+
+---
+
+## Best Practices
+
+- Keep your private key secure — never commit .env to Git.
+- Provide fallback logic so your app continues working even if GenLayer calls fail.
+- Use structured logging (✅, ❌, ⚠️) to make debugging easier.
+- Share reusable utility functions (initializeGenLayer, getWord, generateNewWord) across your project.
 ````
 
 
